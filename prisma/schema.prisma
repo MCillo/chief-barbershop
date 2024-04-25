@@ -72,3 +72,20 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+// DB SCHEMA FOR CHIEF-BARBERSHOP DB
+
+model Users {
+  user_id           Int      @id @default(autoincrement())
+  first_name        String?
+  last_name         String?
+  email             String?
+  phone_number      String?
+  address           String?
+  gender            String?
+  date_of_birth     DateTime?
+  registration_date DateTime @default(now())
+  last_visit        DateTime?
+  notes             String?
+}
+
