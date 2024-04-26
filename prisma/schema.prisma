@@ -74,18 +74,107 @@ model VerificationToken {
 }
 
 // DB SCHEMA FOR CHIEF-BARBERSHOP DB
-
+// Users table
 model Users {
-  user_id           Int      @id @default(autoincrement())
-  first_name        String?
-  last_name         String?
-  email             String?
-  phone_number      String?
-  address           String?
-  gender            String?
-  date_of_birth     DateTime?
+  user_id       Int      @id @default(autoincrement())
+  first_name    String?
+  last_name     String?
+  email         String?
+  phone_number  String?
+  address       String?
+  gender        String? @db.Char(1)
+  date_of_birth DateTime?
   registration_date DateTime @default(now())
-  last_visit        DateTime?
-  notes             String?
+  last_visit    DateTime?
+  notes         String?
+  Appointments  Appointments[]
+  Reviews       Reviews[]
+  Orders        Orders[]
+}
+
+// Barbers table
+model Barbers {
+  barber_id    Int      @id @default(autoincrement())
+  first_name   String?
+  last_name    String?
+  email        String?
+  phone_number String?
+  specialties  String?
+  Appointments Appointments[]
+  Reviews      Reviews[]
+}
+
+// Appointments table
+model Appointments {
+  appointment_id     Int      @id @default(autoincrement())
+  user_id            Int
+  barber_id          Int
+  appointment_date   DateTime
+  status             String?
+  services           String?
+  
+  // Foreign keys
+  user   Users   @relation(fields: [user_id], references: [user_id])
+  barber Barbers @relation(fields: [barber_id], references: [barber_id])
+}
+
+
+
+// Services table
+model Services {
+  service_id  Int      @id @default(autoincrement())
+  name        String?
+  description String?
+  price       Float?
+}
+
+// Reviews table
+model Reviews {
+  review_id   Int      @id @default(autoincrement())
+  user_id     Int
+  barber_id   Int
+  rating      Int?
+  comment     String?
+  date_time   DateTime?
+  
+  // Foreign keys
+  user   Users   @relation(fields: [user_id], references: [user_id])
+  barber Barbers @relation(fields: [barber_id], references: [barber_id])
+}
+
+// Products table
+model Products {
+  product_id       Int      @id @default(autoincrement())
+  name             String?
+  description      String?
+  price            Float?
+  stock_quantity   Int?
+  category_id      Int?
+  Order_Items      Order_Items[]
+}
+
+// Orders table
+model Orders {
+  order_id        Int      @id @default(autoincrement())
+  user_id         Int
+  order_date_time DateTime?
+  status          String?
+  
+  // Foreign key
+  user        Users        @relation(fields: [user_id], references: [user_id])
+  Order_Items Order_Items[]
+}
+
+// Order_Items table
+model Order_Items {
+  order_item_id   Int     @id @default(autoincrement())
+  order_id        Int
+  product_id      Int
+  quantity        Int?
+  price           Float?
+  
+  // Foreign keys
+  order   Orders   @relation(fields: [order_id], references: [order_id])
+  product Products @relation(fields: [product_id], references: [product_id])
 }
 
