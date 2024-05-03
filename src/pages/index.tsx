@@ -2,23 +2,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 
-import { PrismaClient } from "@prisma/client";
 import { api } from "~/utils/api";
-
-const prisma = new PrismaClient();
-
-async function getUsers() {
-  const users = await prisma.users.findMany();
-  console.log(users);
-}
-
-getUsers()
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
